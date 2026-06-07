@@ -2,7 +2,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 
 def evaluate_model(model, X_test, y_test):
     """
-    Evaluates a model on test data.
+    Evaluates an XGBoost model on test data.
 
     Args:
         model: Trained model.

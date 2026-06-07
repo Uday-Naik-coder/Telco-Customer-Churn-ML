@@ -63,3 +63,4 @@ def build_features(df: pd.DataFrame, target_col: str = "Churn") -> pd.DataFrame:
             df[c] = df[c].fillna(0).astype(int)
 
     return df
+
