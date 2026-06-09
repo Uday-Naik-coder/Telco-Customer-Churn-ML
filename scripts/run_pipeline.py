@@ -6,6 +6,7 @@ import argparse
 import pandas as pd
 import mlflow
 import mlflow.sklearn
+from posthog import project_root
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import (
     classification_report, precision_score, recall_score,
@@ -67,6 +68,17 @@ def main(args):
         # Convert bool to int
         for c in df_enc.select_dtypes(include=["bool"]).columns:
             df_enc[c] = df_enc[c].astype(int)
+
+        # Save feature list for serving
+        import json
+        artifacts_dir = os.path.join(project_root, "artifacts")
+        os.makedirs(artifacts_dir, exist_ok=True)
+        feature_cols = list(df_enc.drop(columns=[target]).columns)
+        with open(os.path.join(artifacts_dir, "feature_columns.json"), "w") as f:
+            json.dump(feature_cols, f)
+
+        mlflow.log_text("\n".join(feature_cols), artifact_file="feature_columns.txt")
+
 
         X = df_enc.drop(columns=[target])
         y = df_enc[target]
