@@ -15,6 +15,10 @@ RUN pip install --upgrade pip \
 # 5. Copy the entire project into the image
 COPY . .
 
+# make "serving" and "app" importable without the "src." prefix
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app/src
+
 # 6. Expose FastAPI port
 EXPOSE 8000
 
