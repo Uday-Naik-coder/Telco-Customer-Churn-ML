@@ -4,6 +4,10 @@ from serving.inference import predict
 
 app = FastAPI()
 
+@app.get("/")
+def root():
+    return {"status": "ok"}
+
 class CustomerData(BaseModel):
     gender: str
     Partner: str
