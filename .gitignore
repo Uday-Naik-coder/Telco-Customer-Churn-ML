@@ -17,5 +17,8 @@ artifacts/
 data/raw/
 data/processed/
 
+# BUT keep our bundled model
+!src/serving/model/
+
 # Environment/config
 .env
