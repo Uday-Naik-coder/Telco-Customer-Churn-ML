@@ -15,6 +15,9 @@ RUN pip install --upgrade pip \
 # 5. Copy the entire project into the image
 COPY . .
 
+# Explicitly copy model (in case .dockerignore excluded mlruns)
+COPY src/serving/model /app/src/serving/model
+
 # make "serving" and "app" importable without the "src." prefix
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app/src
