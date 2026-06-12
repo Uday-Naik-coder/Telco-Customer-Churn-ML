@@ -47,7 +47,6 @@ def gradio_interface(
     TechSupport, StreamingTV, StreamingMovies, Contract,
     PaperlessBilling, PaymentMethod, tenure, MonthlyCharges, TotalCharges
 ):
-    # Convert to dict for predict()
     data = {
         "gender": gender,
         "Partner": Partner,
@@ -68,7 +67,8 @@ def gradio_interface(
         "MonthlyCharges": float(MonthlyCharges),
         "TotalCharges": float(TotalCharges),
     }
-    return predict(data)
+    result = predict(data)
+    return str(result)
 
 # Build Gradio interface
 demo = gr.Interface(

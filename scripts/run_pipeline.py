@@ -70,15 +70,23 @@ def main(args):
             df_enc[c] = df_enc[c].astype(int)
 
         # Save feature list for serving
-        import json
+        import json, joblib
         artifacts_dir = os.path.join(project_root, "artifacts")
         os.makedirs(artifacts_dir, exist_ok=True)
+
         feature_cols = list(df_enc.drop(columns=[target]).columns)
         with open(os.path.join(artifacts_dir, "feature_columns.json"), "w") as f:
             json.dump(feature_cols, f)
 
         mlflow.log_text("\n".join(feature_cols), artifact_file="feature_columns.txt")
 
+        # NEW: save preprocessing artifacts
+        preprocessing_artifact = {
+            "feature_columns": feature_cols,
+            "target": target
+        }
+        joblib.dump(preprocessing_artifact, os.path.join(artifacts_dir, "preprocessing.pkl"))
+        mlflow.log_artifact(os.path.join(artifacts_dir, "preprocessing.pkl"))
 
         X = df_enc.drop(columns=[target])
         y = df_enc[target]
@@ -141,6 +149,7 @@ if __name__ == "__main__":
 
     args = p.parse_args()
     main(args)
+
 """
 # Use this below to run the pipeline:
 
