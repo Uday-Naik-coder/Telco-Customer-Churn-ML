@@ -22,3 +22,5 @@ data/processed/
 
 # Environment/config
 .env
+
+.gradio/
