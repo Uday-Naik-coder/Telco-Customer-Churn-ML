@@ -16,13 +16,13 @@ RUN pip install --upgrade pip \
 COPY . .
 
 # Explicitly copy model (in case .dockerignore excluded mlruns)
-COPY src/serving/model /app/serving/model
+# NOTE: destination changed to /app/src/serving/model to match inference.py's path
+COPY src/serving/model /app/src/serving/model
 
-# Copy the trained MLflow model explicitly into /app/model
-# (make sure you have this path locally before building)
-COPY mlruns/0/3b1a41221fc44548aed629fa42b762e0/artifacts/model /app/model
-COPY mlruns/0/3b1a41221fc44548aed629fa42b762e0/artifacts/feature_columns.txt /app/model/feature_columns.txt
-
+# Copy MLflow run (artifacts + metadata) to the flat /app/model convenience path
+COPY src/serving/model/3b1a41221fc44548aed629fa42b762e0/artifacts/model /app/model
+COPY src/serving/model/3b1a41221fc44548aed629fa42b762e0/artifacts/feature_columns.txt /app/model/feature_columns.txt
+COPY src/serving/model/3b1a41221fc44548aed629fa42b762e0/artifacts/preprocessing.pkl /app/model/preprocessing.pkl
 
 # make "serving" and "app" importable without the "src." prefix
 ENV PYTHONUNBUFFERED=1 \
@@ -33,4 +33,3 @@ EXPOSE 8000
 
 # 7. Run the FastAPI app using uvicorn (change path if needed)
 CMD ["python", "-m", "uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-

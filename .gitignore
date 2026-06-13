@@ -1,9 +1,9 @@
-# Virtual environments
+# venvs
 .venv/
 venv/
 env/
 
-# OS files
+# OS cruft
 .DS_Store
 
 # Python cache
@@ -11,16 +11,12 @@ __pycache__/
 *.py[cod]
 *.pyo
 
-# ML artifacts
+# Big artifacts we don't want in git
 mlruns/
 artifacts/
 data/raw/
 data/processed/
 
-# BUT keep our bundled model
+# BUT keep our bundled serving model in the repo
 !src/serving/model/
-
-# Environment/config
-.env
-
-.gradio/
+!src/serving/model/**
