@@ -18,6 +18,12 @@ COPY . .
 # Explicitly copy model (in case .dockerignore excluded mlruns)
 COPY src/serving/model /app/serving/model
 
+# Copy the trained MLflow model explicitly into /app/model
+# (make sure you have this path locally before building)
+COPY mlruns/0/3b1a41221fc44548aed629fa42b762e0/artifacts/model /app/model
+COPY mlruns/0/3b1a41221fc44548aed629fa42b762e0/artifacts/feature_columns.txt /app/model/feature_columns.txt
+
+
 # make "serving" and "app" importable without the "src." prefix
 ENV PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app/src
