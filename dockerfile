@@ -25,7 +25,9 @@ COPY src/serving/model/3b1a41221fc44548aed629fa42b762e0/artifacts/feature_column
 COPY src/serving/model/3b1a41221fc44548aed629fa42b762e0/artifacts/preprocessing.pkl /app/model/preprocessing.pkl
 
 # make "serving" and "app" importable without the "src." prefix
-ENV PYTHONUNBUFFERED=1 \
+# ensures logs are shown in real-time (no buffering).
+# lets you import modules using from app... instead of from src.app....
+ENV PYTHONUNBUFFERED=1 \ 
     PYTHONPATH=/app/src
 
 # 6. Expose FastAPI port

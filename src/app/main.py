@@ -92,6 +92,10 @@ def get_prediction(data: CustomerData):
         # Return error details for debugging (consider logging in production)
         return {"error": str(e)}
 
+
+# =================================================== # 
+
+
 # === GRADIO WEB INTERFACE ===
 def gradio_interface(
     gender, Partner, Dependents, PhoneService, MultipleLines,
