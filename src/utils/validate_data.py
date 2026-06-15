@@ -1,34 +1,3 @@
-"""
-DATA VALIDATION - Production-Ready Data Quality Checks
-======================================================
-
-This module implements comprehensive data validation using Great Expectations,
-which is ESSENTIAL for production machine learning systems. Data quality issues
-are one of the primary causes of model failures in production.
-
-Why Data Validation is Critical:
-1. Prevents training on corrupted/inconsistent data
-2. Catches data pipeline failures early  
-3. Ensures model assumptions are met
-4. Provides audit trail for compliance
-5. Reduces silent model degradation
-
-Great Expectations Benefits:
-- Declarative data quality tests
-- Automated validation reporting
-- Integration with MLflow for tracking
-- Standardized expectation patterns
-- Rich validation result metadata
-
-Production Usage:
-- Run validation BEFORE every model training
-- Log validation results to MLflow for monitoring
-- Fail training pipeline if critical validations fail
-- Use for ongoing data monitoring in production
-
-IMPORTANT: Add new expectations as data understanding improves
-"""
-
 import great_expectations as ge
 from typing import Tuple, List
 
@@ -41,24 +10,6 @@ def validate_telco_data(df) -> Tuple[bool, List[str]]:
     It validates data integrity, business logic constraints, and statistical properties
     that the ML model expects.
     
-    Validation Categories:
-    1. Schema Validation: Required columns exist and have correct types
-    2. Business Logic: Values fall within expected business ranges
-    3. Data Integrity: No critical missing values or impossible combinations
-    4. Statistical Properties: Distributions within expected ranges
-    
-    Args:
-        df: Raw pandas DataFrame with telco customer data
-        
-    Returns:
-        Tuple containing:
-        - success (bool): True if all validations pass, False if any fail
-        - failed_expectations (List[str]): List of failed expectation types for debugging
-        
-    Example:
-        >>> is_valid, failures = validate_telco_data(df)
-        >>> if not is_valid:
-        ...     print(f"Data validation failed: {failures}")
     """
     print("🔍 Starting data validation with Great Expectations...")
     

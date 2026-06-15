@@ -1,29 +1,3 @@
-"""
-FEATURE ENGINEERING - Training Pipeline Feature Transformations
-================================================================
-
-This module implements the core feature engineering logic for the Telco Customer Churn model.
-The transformations applied here are CRITICAL and must be exactly replicated in the serving
-pipeline to prevent train/serve skew.
-
-Key Transformations:
-1. Binary Encoding: Convert Yes/No, Male/Female to 0/1
-2. One-Hot Encoding: Convert multi-category features with drop_first=True
-3. Boolean Conversion: Convert boolean columns to integers
-4. Type Handling: Ensure consistent data types for XGBoost
-
-CRITICAL PATTERN: Feature Engineering Consistency
-- Binary mappings must be deterministic and documented
-- One-hot encoding parameters (drop_first=True) must match serving
-- Feature column ordering must be preserved for model compatibility
-- All transformations must handle missing/unknown values gracefully
-
-Production Considerations:
-- New categories in serving data will be handled by fill_value=0 in serving pipeline
-- Feature engineering logic is replicated in src/serving/inference.py
-- Any changes here require corresponding updates in serving pipeline
-"""
-
 import pandas as pd
 
 
@@ -34,20 +8,7 @@ def _map_binary_series(s: pd.Series) -> pd.Series:
     This function implements the core binary encoding logic that converts
     categorical features with exactly 2 values into 0/1 integers. The mappings
     are deterministic and must be consistent between training and serving.
-    
-    Known Binary Mappings:
-    - Yes/No → No=0, Yes=1 (business logic: Yes is positive)
-    - Male/Female → Female=0, Male=1 (alphabetical consistency)
-    
-    For unknown binary features, uses stable ordering based on unique values.
-    
-    Args:
-        s: pandas Series with exactly 2 unique values
-        
-    Returns:
-        pandas Series with 0/1 integer encoding, or original series if not binary
-        
-    IMPORTANT: These mappings must match exactly in serving pipeline (BINARY_MAP)
+
     """
     # Get unique values and remove NaN
     vals = list(pd.Series(s.dropna().unique()).astype(str))
@@ -84,27 +45,7 @@ def build_features(df: pd.DataFrame, target_col: str = "Churn") -> pd.DataFrame:
     This is the main feature engineering function that transforms raw customer data
     into ML-ready features. The transformations must be exactly replicated in the
     serving pipeline to ensure prediction accuracy.
-    
-    Feature Engineering Pipeline:
-    1. Identify categorical vs numeric columns
-    2. Split categorical into binary (2 values) vs multi-category (>2 values) 
-    3. Apply binary encoding to 2-value features
-    4. Apply one-hot encoding to multi-value features
-    5. Convert boolean columns to integers
-    6. Clean up data types for XGBoost compatibility
-    
-    Args:
-        df: DataFrame with raw customer data including target column
-        target_col: Name of target column to exclude from feature engineering
-        
-    Returns:
-        DataFrame with engineered features ready for ML training
-        
-    Key Parameters:
-    - drop_first=True: Prevents multicollinearity in one-hot encoding
-    - astype(int): Ensures XGBoost compatibility (no nullable integers)
-    
-    CRITICAL: Any changes here must be reflected in serving pipeline inference.py
+
     """
     df = df.copy()
     print(f"🔧 Starting feature engineering on {df.shape[1]} columns...")

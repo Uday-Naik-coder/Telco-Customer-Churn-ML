@@ -22,7 +22,7 @@ def tune_model(X, y):
             "eval_metric": "logloss"
         }
         model = XGBClassifier(**params)
-        scores = cross_val_score(model, X, y, cv=3, scoring="accuracy")
+        scores = cross_val_score(model, X, y, cv=3, scoring="recall")
         return scores.mean()
 
     study = optuna.create_study(direction="maximize")

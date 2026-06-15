@@ -1,32 +1,6 @@
 #!/usr/bin/env python3
 """
-MAIN TRAINING PIPELINE - Complete MLOps Pipeline for Telco Customer Churn
-=========================================================================
-
-This script implements the complete machine learning training pipeline for predicting
-customer churn in a telecom dataset. It demonstrates MLOps best practices including:
-
-- Data validation with Great Expectations
-- Feature engineering with consistency patterns
-- Model training with XGBoost and hyperparameter optimization
-- Experiment tracking with MLflow
-- Artifact management for reproducible deployments
-
-Key Components:
-1. Data Loading & Validation (ESSENTIAL for production ML)
-2. Preprocessing & Feature Engineering (with serving consistency)
-3. Model Training with optimized hyperparameters
-4. MLflow logging for experiment tracking and model versioning
-5. Artifact saving for serving pipeline consistency
-
-Usage:
-    python scripts/run_pipeline.py --input data/raw/Telco-Customer-Churn.csv --target Churn
-
-Dependencies:
-    - MLflow for experiment tracking (REQUIRED)
-    - XGBoost for model training (REQUIRED) 
-    - Great Expectations for data validation (ESSENTIAL for production)
-    - Scikit-learn for evaluation metrics (REQUIRED)
+Runs sequentially: load → validate → preprocess → feature engineering
 """
 
 import os
@@ -58,13 +32,6 @@ def main(args):
     """
     Main training pipeline function that orchestrates the complete ML workflow.
     
-    This function implements the MLOps training pipeline with the following stages:
-    1. MLflow experiment setup and tracking configuration
-    2. Data loading and validation (production-ready quality checks)
-    3. Data preprocessing and feature engineering
-    4. Model training with optimized XGBoost hyperparameters
-    5. Model evaluation and metrics logging
-    6. Artifact saving for serving pipeline consistency
     """
     
     # === MLflow Setup - ESSENTIAL for experiment tracking ===

@@ -9,16 +9,6 @@ Architecture:
 - FastAPI: High-performance REST API with automatic OpenAPI documentation
 - Gradio: User-friendly web UI for manual testing and demonstrations
 - Pydantic: Data validation and automatic API documentation
-
-Key Features:
-1. GET / - Health check endpoint for load balancer monitoring
-2. POST /predict - RESTful API for programmatic access
-3. /ui - Gradio web interface for manual testing
-
-Deployment:
-- Runs on uvicorn ASGI server (production-ready)
-- Containerized with Docker for consistent deployments
-- Deployed on AWS ECS Fargate with Application Load Balancer
 """
 
 from fastapi import FastAPI
@@ -39,11 +29,6 @@ app = FastAPI(
 def root():
     """
     Health check endpoint for monitoring and load balancer health checks.
-    
-    This endpoint is ESSENTIAL for:
-    - AWS ALB health checks to determine if the container is healthy
-    - Monitoring systems to verify service availability
-    - Quick service status verification
     """
     return {"status": "ok"}
 
@@ -55,9 +40,6 @@ class CustomerData(BaseModel):
     
     This schema defines the exact 18 features required for churn prediction.
     All features match the original dataset structure for consistency.
-    
-    IMPORTANT: Field names must match exactly with training data features
-    to ensure proper feature engineering in the inference pipeline.
     """
     # Demographics
     gender: str                # "Male" or "Female"
@@ -101,11 +83,6 @@ def get_prediction(data: CustomerData):
     Expected Response:
     - {"prediction": "Likely to churn"} or {"prediction": "Not likely to churn"}
     - {"error": "error_message"} if prediction fails
-    
-    Usage:
-    curl -X POST "http://localhost:8000/predict" \
-         -H "Content-Type: application/json" \
-         -d '{"gender": "Male", "tenure": 12, ...}'
     """
     try:
         # Convert Pydantic model to dict and call inference pipeline
@@ -131,8 +108,6 @@ def gradio_interface(
     3. Calls the same inference pipeline used by the API
     4. Returns user-friendly prediction string
     
-    IMPORTANT: Uses the same predict() function as the API endpoint
-    to ensure consistent results between API and UI.
     """
     # Construct data dictionary matching CustomerData schema
     data = {

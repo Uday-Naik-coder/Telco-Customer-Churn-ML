@@ -11,7 +11,7 @@ def preprocess_data(df: pd.DataFrame, target_col: str = "Churn") -> pd.DataFrame
     - simple NA handling
     """
     # tidy headers
-    df.columns = df.columns.str.strip()
+    df.columns = df.columns.str.strip()  # Remove leading/trailing whitespace
 
     # drop ids if present
     for col in ["customerID", "CustomerID", "customer_id"]:
