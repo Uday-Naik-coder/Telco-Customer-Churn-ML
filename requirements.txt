@@ -29,11 +29,12 @@ Flask==3.1.1
 fonttools==4.59.0
 gitdb==4.0.12
 GitPython==3.1.45
-gradio
+gradio==3.36.1
+gradio-client==0.2.9
 graphene==3.4.3
 graphql-core==3.2.6
 graphql-relay==3.2.0
-great_expectations==1.5.8
+great_expectations==0.18.21
 gunicorn==22.0.0
 h11==0.16.0
 idna==3.10
