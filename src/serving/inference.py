@@ -38,12 +38,12 @@ def load_model():
     # --------------------------------------------------------
     try:
         model = mlflow.pyfunc.load_model(str(DOCKER_MODEL_DIR))
-        print(f"✅ Model loaded successfully from {DOCKER_MODEL_DIR}")
+        print(f"[OK] Model loaded successfully from {DOCKER_MODEL_DIR}")
 
         return model, DOCKER_MODEL_DIR
 
     except Exception as e:
-        print(f"❌ Failed to load model from {DOCKER_MODEL_DIR}: {e}")
+        print(f"[ERROR] Failed to load model from {DOCKER_MODEL_DIR}: {e}")
 
     # --------------------------------------------------------
     # 2. Fallback to local MLflow artifacts
@@ -68,7 +68,7 @@ def load_model():
 
         model_dir = Path(latest_model)
 
-        print(f"✅ Fallback: Loaded model from {model_dir}")
+        print(f"[OK] Fallback: Loaded model from {model_dir}")
 
         return model, model_dir
 
@@ -101,13 +101,19 @@ try:
     #
     # artifacts/model/
     #
-    # Therefore feature_columns.txt is one directory above.
+    # Docker copies feature_columns.txt INTO the model dir,
+    # but MLflow stores it one level above (in artifacts/).
+    # Check both locations.
 
-    feature_file = MODEL_DIR.parent / "feature_columns.txt"
+    feature_file = MODEL_DIR / "feature_columns.txt"
+
+    if not feature_file.exists():
+        feature_file = MODEL_DIR.parent / "feature_columns.txt"
 
     if not feature_file.exists():
         raise FileNotFoundError(
-            f"Feature columns file not found: {feature_file}"
+            f"Feature columns file not found in {MODEL_DIR} "
+            f"or {MODEL_DIR.parent}"
         )
 
     with open(feature_file, "r") as f:
@@ -118,7 +124,7 @@ try:
         ]
 
     print(
-        f"✅ Loaded {len(FEATURE_COLS)} feature columns "
+        f"[OK] Loaded {len(FEATURE_COLS)} feature columns "
         f"from {feature_file}"
     )
 
